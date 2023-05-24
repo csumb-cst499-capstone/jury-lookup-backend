@@ -1,8 +1,8 @@
 const express = require('express');
 
 const router = express.Router()
-const Juror = require("../models/juror");
-
+const Juror = require("../models/juror_model");
+const juror_controller = require('../controllers/juror_controller');
 
 
 //Post Method
@@ -11,31 +11,11 @@ router.post('/post', (req, res) => {
 })
 
 // Get all Method
-router.get('/getAll', async (req, res) => {
-    try {
-        const jurors = await Juror.find().limit(10);
-        res.json(jurors);
-        console.log(jurors.length);
-        
-    } catch (err) {
-        res.status(500).json({ message: err.message });
-    }
-});
-
+router.get('/getAll', juror_controller.juror_getAll);
 
 //Get by ID Method
-router.get('/getOne/:id', (req, res) => {
-    res.send('Get by ID API')
-})
+router.get('/getOne/:id', juror_controller.juror_getOne);
 
-//Update by ID Method
-router.patch('/update/:id', (req, res) => {
-    res.send('Update by ID API')
-})
 
-//Delete by ID Method
-router.delete('/delete/:id', (req, res) => {
-    res.send('Delete by ID API')
-})
 
 module.exports = router;
