@@ -23,3 +23,5 @@ exports.juror_getOne = async (req, res) => {
     }
 
 }
+
+
