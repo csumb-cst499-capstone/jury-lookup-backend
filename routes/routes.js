@@ -14,6 +14,8 @@ router.get('/getAll', juror_controller.juror_getAll);
 router.get('/getOne/:id', juror_controller.juror_getOne);
 
 
+// Post method to login
+router.post('/login', juror_controller.juror_login);
 
 
 router.get('/hello', (req, res) => {
