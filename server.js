@@ -18,9 +18,10 @@ database.once('connected', () => {
 const app = express();
 
 const options = {
-    origin: ['http://localhost:3000'],
+    origin: ['http://localhost:3001'],
 }
 app.use(cors(options));
+app.use(express.json());
 
 app.use('/api', routes);
 
