@@ -17,6 +17,12 @@ router.get('/getOne/:id', juror_controller.juror_getOne);
 // Post method to login
 router.post('/login', juror_controller.juror_login);
 
+// Post method to postpone
+router.post('/postpone', juror_controller.juror_postpone);
+
+// Change postpone status
+router.post('/changePostponeStatus', juror_controller.juror_changeCanPostpone);
+
 
 router.get('/hello', (req, res) => {
     // send back a JSON response
