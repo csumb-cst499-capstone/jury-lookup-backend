@@ -13,6 +13,8 @@ router.get('/getAll', juror_controller.juror_getAll);
 //Get by ID Method
 router.get('/getOne/:id', juror_controller.juror_getOne);
 
+// Get summon details
+router.get('/getSummonDetails/:BadgeNumber/:PinCode', juror_controller.juror_getSummonDetails);
 
 // Post method to login
 router.post('/login', juror_controller.juror_login);
@@ -23,7 +25,9 @@ router.post('/postpone', juror_controller.juror_postpone);
 // Change postpone status
 router.post('/changePostponeStatus', juror_controller.juror_changeCanPostpone);
 
-
+// Postpone the summon date
+router.put('/postponeSummon/:BadgeNumber/:PinCode/:postponeDate', juror_controller.juror_postponeSummon);
+  
 router.get('/hello', (req, res) => {
     // send back a JSON response
     res.set('Access-Control-Allow-Origin', '*');
