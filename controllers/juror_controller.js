@@ -59,8 +59,6 @@ exports.jurorLogin = async (req, res) => {
   }
 }
 
-// TODO: implement a postpone functiont that allows a juror to postpone their service to a later date (up to 6 weeks) the juror will be able to postpone their service once and will not be able to postpone again if they have already postponed their service
-// allow the juror to select a date from a calendar and then update the juror's service date to the selected date (if the date is within 6 weeks of the their original service date and they may only select a date that is a Monday)
 exports.jurorPostpone = async (req, res) => {
   try {
     const foundJuror = await JurorModel.findOne({
