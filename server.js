@@ -1,30 +1,19 @@
-require('dotenv').config();
+require('dotenv').config()
+const express = require('express')
+require('jsonwebtoken')
+const routes = require('./routes/routes')
+const cors = require('cors')
+require('./utils/db_utils')
 
-const express = require('express');
-const mongoose = require('mongoose');
-const mongoString = process.env.DATABASE_URL;
-const routes = require('./routes/routes');
-const cors = require('cors');
-mongoose.connect(mongoString);
-const database = mongoose.connection;
-
-database.on('error', (error) => {
-    console.log(error)
-})
-
-database.once('connected', () => {
-    console.log('Database Connected');
-})
-const app = express();
-
+const app = express()
 const options = {
-    origin: ['http://localhost:3001'],
+  origin: ['http://localhost:3001']
 }
-app.use(cors(options));
-app.use(express.json());
+app.use(cors(options))
+app.use(express.json())
 
-app.use('/api', routes);
+app.use('/api', routes)
 
 app.listen(3000, () => {
-    console.log(`Server Started at ${3000}`)
+  console.log(`Server Started at ${3000}`)
 })
