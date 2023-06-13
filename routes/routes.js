@@ -12,12 +12,6 @@ router.get('/getAll', jurorController.jurorGetAll)
 // Get by ID Method
 router.get('/getOne/:id', jurorController.jurorGetOne)
 
-// Get summon details
-router.get(
-  '/getSummonDetails/:BadgeNumber/:PinCode',
-  jurorController.jurorGetSummonDetails
-)
-
 // Post method to login
 router.post('/login', jurorController.jurorLogin)
 
@@ -26,12 +20,6 @@ router.post('/postpone', jurorController.jurorPostpone)
 
 // Change postpone status
 router.post('/changePostponeStatus', jurorController.jurorChangeCanPostpone)
-
-// Postpone the summon date
-router.put(
-  '/postponeSummon/:BadgeNumber/:PinCode/:postponeDate',
-  jurorController.jurorPostponeSummon
-)
 
 router.get('/hello', (req, res) => {
   // send back a JSON response
