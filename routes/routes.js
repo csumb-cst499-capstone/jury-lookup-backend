@@ -23,4 +23,9 @@ router.get('/hello', (req, res) => {
     res.set('Access-Control-Allow-Origin', '*');
     res.json({ "message": "Hello, World!" });
 });
+
+router.post('/juror', juror_controller.getJurorByBadgeAndPin);
+router.post('/juror/postpone', juror_controller.postponeSummon);
+
 module.exports = router;
+
