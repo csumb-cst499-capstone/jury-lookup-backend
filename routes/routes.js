@@ -22,21 +22,8 @@ router.post('/postpone', jurorController.jurorPostpone)
 router.post('/changePostponeStatus', jurorController.jurorChangeCanPostpone)
 
 router.get('/hello', (req, res) => {
-<<<<<<< HEAD
-    // send back a JSON response
-    res.set('Access-Control-Allow-Origin', '*');
-    res.json({ "message": "Hello, World!" });
-});
-
-router.post('/juror', juror_controller.getJurorByBadgeAndPin);
-router.post('/juror/postpone', juror_controller.postponeSummon);
-
-module.exports = router;
-
-=======
   // send back a JSON response
   res.set('Access-Control-Allow-Origin', '*')
   res.json({ message: 'Hello, World!' })
 })
 module.exports = router
->>>>>>> f6641de28c2d868f9d1d3a14946f31ae5c527799
