@@ -1,7 +1,7 @@
 const JurorModel = require('../models/juror_model')
 require('express-async-errors')
 const CONSTANT = require('../constants/JUROR_CONSTANTS')
-
+const JWT = require('../utils/jwt_utils')
 exports.jurorGetAll = async (req, res) => {
   try {
     const jurors = await JurorModel.find().limit(CONSTANT.MAX_GET_ALL)
@@ -24,36 +24,45 @@ exports.jurorGetOne = async (req, res) => {
 exports.jurorLogin = async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   try {
+    const foundJuror = await verifyCredentials(
+      req.body.BadgeNumber,
+      req.body.PinCode
+    )
+    if (!foundJuror) {
+      return res.status(401).json({ message: 'Invalid credentials' })
+    }
+
+    const token = JWT.generateToken(foundJuror) // Corrected code
+    res.header('Authorization', token)
+    res.json({ token })
+  } catch (err) {
+    res.status(500).json({ message: err.message })
+  }
+}
+
+exports.verify = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  JWT.verifyToken(req, res, () => {
+    res.status(200).json({ message: 'Valid token' })
+  })
+}
+
+exports.jurorSummonDetails = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  // check for valid token
+  JWT.verifyToken(req, res, async () => {
+    res.status(200).json({ message: 'Valid token' })
+  })
+
+  try {
     const foundJuror = await JurorModel.findOne({
       BadgeNumber: req.body.BadgeNumber,
       PinCode: req.body.PinCode
     })
     if (!foundJuror) {
-      res.status(404).json({ message: 'Juror not found' })
+      return res.status(404).json({ message: 'Juror not found' })
     }
-
-    const {
-      FirstName,
-      LastName,
-      BadgeNumber,
-      SummonsDate,
-      MailingAddress,
-      City,
-      State,
-      GroupNumber,
-      CanPostpone
-    } = foundJuror
-    res.json({
-      FirstName,
-      LastName,
-      BadgeNumber,
-      SummonsDate,
-      MailingAddress,
-      City,
-      State,
-      GroupNumber,
-      CanPostpone
-    })
+    res.json(foundJuror)
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
@@ -113,5 +122,24 @@ exports.jurorChangeCanPostpone = async (req, res) => {
     res.json(newJuror)
   } catch (err) {
     res.status(500).json({ message: err.message })
+  }
+}
+
+const verifyCredentials = async (BadgeNumber, PinCode) => {
+  try {
+    const juror = await JurorModel.findOne({ BadgeNumber, PinCode })
+    if (!juror) {
+      return null
+    }
+
+    const isValidPinCode = juror.PinCode === PinCode
+
+    if (!isValidPinCode) {
+      return null
+    }
+
+    return juror
+  } catch (err) {
+    return null
   }
 }
