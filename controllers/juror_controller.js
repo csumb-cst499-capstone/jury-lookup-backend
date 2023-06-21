@@ -37,10 +37,8 @@ exports.jurorLogin = async (req, res) => {
       LastName,
       BadgeNumber,
       SummonsDate,
-      MailingAddress,
-      City,
-      State,
       GroupNumber,
+      ReportingLocation,
       CanPostpone
     } = foundJuror
     res.json({
@@ -48,10 +46,8 @@ exports.jurorLogin = async (req, res) => {
       LastName,
       BadgeNumber,
       SummonsDate,
-      MailingAddress,
-      City,
-      State,
       GroupNumber,
+      ReportingLocation,
       CanPostpone
     })
   } catch (err) {
@@ -101,8 +97,7 @@ exports.jurorPostpone = async (req, res) => {
 exports.jurorChangeCanPostpone = async (req, res) => {
   try {
     const foundJuror = await JurorModel.findOne({
-      BadgeNumber: req.body.BadgeNumber,
-      PinCode: req.body.PinCode
+      BadgeNumber: req.body.BadgeNumber
     })
     if (!foundJuror) {
       res.status(404).json({ message: 'Juror not found' })
