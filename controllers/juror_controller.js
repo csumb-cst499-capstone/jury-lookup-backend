@@ -71,7 +71,7 @@ exports.jurorPostpone = async (req, res) => {
       return res.status(404).json({ message: 'Juror cannot postpone' })
     }
 
-    if (newDate.getDay() !== 1) {
+    if (newDate.getDay() !== 0) {
       return res.status(404).json({ message: 'Postpone date must be a Monday' })
     }
     if (newDate < serviceDate) {
