@@ -59,8 +59,7 @@ exports.jurorPostpone = async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   try {
     const foundJuror = await JurorModel.findOne({
-      BadgeNumber: req.body.BadgeNumber,
-      PinCode: req.body.PinCode
+      BadgeNumber: req.body.BadgeNumber
     })
     if (!foundJuror) {
       return res.status(404).json({ message: 'Juror not found' })
