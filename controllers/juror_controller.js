@@ -56,6 +56,7 @@ exports.jurorLogin = async (req, res) => {
 }
 
 exports.jurorPostpone = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
   try {
     const foundJuror = await JurorModel.findOne({
       BadgeNumber: req.body.BadgeNumber,
