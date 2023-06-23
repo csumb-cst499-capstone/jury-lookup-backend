@@ -62,6 +62,25 @@ exports.jurorSummonDetails = async (req, res) => {
     if (!foundJuror) {
       return res.status(404).json({ message: 'Juror not found' })
     }
+
+    const {
+      FirstName,
+      LastName,
+      BadgeNumber,
+      SummonsDate,
+      GroupNumber,
+      ReportingLocation,
+      CanPostpone
+    } = foundJuror
+    res.json({
+      FirstName,
+      LastName,
+      BadgeNumber,
+      SummonsDate,
+      GroupNumber,
+      ReportingLocation,
+      CanPostpone
+    })
     res.json(foundJuror)
   } catch (err) {
     res.status(500).json({ message: err.message })
@@ -69,10 +88,10 @@ exports.jurorSummonDetails = async (req, res) => {
 }
 
 exports.jurorPostpone = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
   try {
     const foundJuror = await JurorModel.findOne({
-      BadgeNumber: req.body.BadgeNumber,
-      PinCode: req.body.PinCode
+      BadgeNumber: req.body.BadgeNumber
     })
     if (!foundJuror) {
       return res.status(404).json({ message: 'Juror not found' })
@@ -84,7 +103,7 @@ exports.jurorPostpone = async (req, res) => {
       return res.status(404).json({ message: 'Juror cannot postpone' })
     }
 
-    if (newDate.getDay() !== 1) {
+    if (newDate.getDay() !== 0) {
       return res.status(404).json({ message: 'Postpone date must be a Monday' })
     }
     if (newDate < serviceDate) {
@@ -101,8 +120,24 @@ exports.jurorPostpone = async (req, res) => {
     foundJuror.SummonsDate = req.body.PostponeDate
     foundJuror.CanPostpone = false
     const newJuror = await foundJuror.save()
-
-    res.json(newJuror)
+    const {
+      FirstName,
+      LastName,
+      BadgeNumber,
+      SummonsDate,
+      GroupNumber,
+      ReportingLocation,
+      CanPostpone
+    } = newJuror
+    res.json({
+      FirstName,
+      LastName,
+      BadgeNumber,
+      SummonsDate,
+      GroupNumber,
+      ReportingLocation,
+      CanPostpone
+    })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
@@ -110,8 +145,7 @@ exports.jurorPostpone = async (req, res) => {
 exports.jurorChangeCanPostpone = async (req, res) => {
   try {
     const foundJuror = await JurorModel.findOne({
-      BadgeNumber: req.body.BadgeNumber,
-      PinCode: req.body.PinCode
+      BadgeNumber: req.body.BadgeNumber
     })
     if (!foundJuror) {
       res.status(404).json({ message: 'Juror not found' })
