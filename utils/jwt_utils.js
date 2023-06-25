@@ -8,7 +8,7 @@ const generateToken = (juror) => {
     PinCode: juror.PinCode
   }
 
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' })
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: '15m' })
 }
 
 const verifyToken = (req, res, next) => {
@@ -20,9 +20,8 @@ const verifyToken = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET)
-    res.json(decoded)
-
-    next()
+    req.body.BadgeNumber = decoded.BadgeNumber // Store the decoded token in the request object
+    next() // Call the next middleware/route handler
   } catch (error) {
     return res.status(403).json({ message: 'Invalid token' })
   }

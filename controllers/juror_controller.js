@@ -3,6 +3,7 @@ require('express-async-errors')
 const CONSTANT = require('../constants/JUROR_CONSTANTS')
 const JWT = require('../utils/jwt_utils')
 exports.jurorGetAll = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
   try {
     const jurors = await JurorModel.find().limit(CONSTANT.MAX_GET_ALL)
     res.json(jurors)
@@ -48,40 +49,38 @@ exports.verify = async (req, res) => {
 }
 
 exports.jurorSummonDetails = async (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*')
-  // check for valid token
-  JWT.verifyToken(req, res, async () => {
-    res.status(200).json({ message: 'Valid token' })
-  })
-
   try {
-    const foundJuror = await JurorModel.findOne({
-      BadgeNumber: req.body.BadgeNumber,
-      PinCode: req.body.PinCode
-    })
-    if (!foundJuror) {
-      return res.status(404).json({ message: 'Juror not found' })
-    }
+    // check for valid token
+    JWT.verifyToken(req, res, async () => {
+      // Token is valid, continue with the code execution
+      const foundJuror = await JurorModel.findOne({
+        BadgeNumber: req.body.BadgeNumber
+      })
 
-    const {
-      FirstName,
-      LastName,
-      BadgeNumber,
-      SummonsDate,
-      GroupNumber,
-      ReportingLocation,
-      CanPostpone
-    } = foundJuror
-    res.json({
-      FirstName,
-      LastName,
-      BadgeNumber,
-      SummonsDate,
-      GroupNumber,
-      ReportingLocation,
-      CanPostpone
+      if (!foundJuror) {
+        return res.status(404).json({ message: 'Juror not found' })
+      }
+
+      const {
+        FirstName,
+        LastName,
+        BadgeNumber,
+        SummonsDate,
+        GroupNumber,
+        ReportingLocation,
+        CanPostpone
+      } = foundJuror
+
+      res.json({
+        FirstName,
+        LastName,
+        BadgeNumber,
+        SummonsDate,
+        GroupNumber,
+        ReportingLocation,
+        CanPostpone
+      })
     })
-    res.json(foundJuror)
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
@@ -90,75 +89,95 @@ exports.jurorSummonDetails = async (req, res) => {
 exports.jurorPostpone = async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   try {
-    const foundJuror = await JurorModel.findOne({
-      BadgeNumber: req.body.BadgeNumber
-    })
-    if (!foundJuror) {
-      return res.status(404).json({ message: 'Juror not found' })
-    }
-    const newDate = new Date(req.body.PostponeDate + 'T00:00:00Z')
-    const serviceDate = new Date(foundJuror.SummonsDate + 'T00:00:00Z')
-
-    if (!foundJuror.CanPostpone) {
-      return res.status(404).json({ message: 'Juror cannot postpone' })
-    }
-
-    if (newDate.getDay() !== 0) {
-      return res.status(404).json({ message: 'Postpone date must be a Monday' })
-    }
-    if (newDate < serviceDate) {
-      return res
-        .status(404)
-        .json({ message: 'Postpone date must be after service date' })
-    }
-    if (newDate > serviceDate + CONSTANT.MAX_DAYS_TO_POSTPONE) {
-      return res.status(404).json({
-        message: 'Postpone date must be within 6 weeks of service date'
+    JWT.verifyToken(req, res, async () => {
+      // Token is valid, continue with the code execution
+      const foundJuror = await JurorModel.findOne({
+        BadgeNumber: req.body.BadgeNumber
       })
-    }
 
-    foundJuror.SummonsDate = req.body.PostponeDate
-    foundJuror.CanPostpone = false
-    const newJuror = await foundJuror.save()
-    const {
-      FirstName,
-      LastName,
-      BadgeNumber,
-      SummonsDate,
-      GroupNumber,
-      ReportingLocation,
-      CanPostpone
-    } = newJuror
-    res.json({
-      FirstName,
-      LastName,
-      BadgeNumber,
-      SummonsDate,
-      GroupNumber,
-      ReportingLocation,
-      CanPostpone
+      if (!foundJuror) {
+        return res.status(404).json({ message: 'Juror not found' })
+      }
+      console.log('postpone date:', req.body.PostponeDate)
+      const newDate = new Date(req.body.PostponeDate + 'T00:00:00Z')
+
+      const serviceDate = new Date(foundJuror.SummonsDate + 'T00:00:00Z')
+
+      console.log('newDate:', newDate)
+      console.log('day of the week:', newDate.getDay())
+
+      if (!foundJuror.CanPostpone) {
+        return res.status(404).json({ message: 'Juror cannot postpone' })
+      }
+
+      if (newDate.getDay() !== 1) {
+        // Adjusted condition to check for Monday (Monday corresponds to 1)
+        return res
+          .status(404)
+          .json({ message: 'Postpone date must be a Monday' })
+      }
+
+      if (newDate < serviceDate) {
+        return res
+          .status(404)
+          .json({ message: 'Postpone date must be after service date' })
+      }
+
+      if (newDate > serviceDate + CONSTANT.MAX_DAYS_TO_POSTPONE) {
+        return res.status(404).json({
+          message: 'Postpone date must be within 6 weeks of service date'
+        })
+      }
+
+      foundJuror.SummonsDate = req.body.PostponeDate
+      foundJuror.CanPostpone = false
+      const newJuror = await foundJuror.save()
+      const {
+        FirstName,
+        LastName,
+        BadgeNumber,
+        SummonsDate,
+        GroupNumber,
+        ReportingLocation,
+        CanPostpone
+      } = newJuror
+
+      res.json({
+        FirstName,
+        LastName,
+        BadgeNumber,
+        SummonsDate,
+        GroupNumber,
+        ReportingLocation,
+        CanPostpone
+      })
     })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
 }
+
 exports.jurorChangeCanPostpone = async (req, res) => {
   try {
-    const foundJuror = await JurorModel.findOne({
-      BadgeNumber: req.body.BadgeNumber
-    })
-    if (!foundJuror) {
-      res.status(404).json({ message: 'Juror not found' })
-    }
-    foundJuror.CanPostpone = req.body.CanPostpone
-    const newJuror = await foundJuror.save()
+    JWT.verifyToken(req, res, async () => {
+      // Token is valid, continue with the code execution
+      const foundJuror = await JurorModel.findOne({
+        BadgeNumber: req.body.BadgeNumber
+      })
+      if (!foundJuror) {
+        res.status(404).json({ message: 'Juror not found' })
+      }
+      foundJuror.CanPostpone = req.body.CanPostpone
+      const newJuror = await foundJuror.save()
 
-    res.json(newJuror)
+      res.json(newJuror)
+    })
   } catch (err) {
     res.status(500).json({ message: err.message })
   }
 }
 
+// Helper function for verifying credentials and returning the juror
 const verifyCredentials = async (BadgeNumber, PinCode) => {
   try {
     const juror = await JurorModel.findOne({ BadgeNumber, PinCode })
