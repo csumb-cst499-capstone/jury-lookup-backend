@@ -2,6 +2,8 @@ const JurorModel = require('../models/juror_model')
 require('express-async-errors')
 const CONSTANT = require('../constants/JUROR_CONSTANTS')
 const JWT = require('../utils/jwt_utils')
+
+// DEV NOTE: THIS IS A TEST FUNCTION
 exports.jurorGetAll = async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   try {
@@ -49,6 +51,7 @@ exports.verify = async (req, res) => {
 }
 
 exports.jurorSummonDetails = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
   try {
     // check for valid token
     JWT.verifyToken(req, res, async () => {
