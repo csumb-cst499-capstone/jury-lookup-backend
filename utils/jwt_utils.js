@@ -1,30 +1,21 @@
 const jwt = require('jsonwebtoken')
 
-const JWT_SECRET = process.env.JWT_SECRET
+const secretKey = process.ENV.JWT_SECRET_KEY
 
-const generateToken = (juror) => {
-  const payload = {
-    BadgeNumber: juror.BadgeNumber,
-    PinCode: juror.PinCode
-  }
-
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: '15m' })
+function generateToken (payload) {
+  return jwt.sign(payload, secretKey)
 }
 
-const verifyToken = (req, res, next) => {
-  const token = req.headers.authorization
-
-  if (!token) {
-    return res.status(401).json({ message: 'Missing authentication token' })
-  }
-
-  try {
-    const decoded = jwt.verify(token, JWT_SECRET)
-    req.body.BadgeNumber = decoded.BadgeNumber // Store the decoded token in the request object
-    next() // Call the next middleware/route handler
-  } catch (error) {
-    return res.status(403).json({ message: 'Invalid token' })
-  }
+function verifyToken (token) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(token, secretKey, (err, decoded) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(decoded)
+      }
+    })
+  })
 }
 
 module.exports = {

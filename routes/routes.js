@@ -12,9 +12,6 @@ router.get('/getAll', jurorController.jurorGetAll)
 // Get by ID Method
 router.get('/getOne/:id', jurorController.jurorGetOne)
 
-// verify token
-router.post('/verify', jurorController.verify)
-
 // Post method to login
 router.post('/login', jurorController.jurorLogin)
 
@@ -23,9 +20,6 @@ router.post('/postpone', jurorController.jurorPostpone)
 
 // Change postpone status
 router.post('/changePostponeStatus', jurorController.jurorChangeCanPostpone)
-
-// Get Summon Details
-router.post('/summon', jurorController.jurorSummonDetails)
 
 router.get('/hello', (req, res) => {
   // send back a JSON response
