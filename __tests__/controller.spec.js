@@ -14,7 +14,6 @@ testUser = {
   GroupNumber: "2",
   ReportingLocation: "King City",
   CanPostpone: true,
-  PostponeDate: "2023-12-26",
 };
 
 let token = "";
