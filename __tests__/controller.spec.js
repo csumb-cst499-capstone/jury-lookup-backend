@@ -16,7 +16,7 @@ testUser = {
   CanPostpone: true,
 };
 
-let token = "";
+let token = ""; 
 
 // test getAll
 describe("GET /api/getAll", () => {
