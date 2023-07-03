@@ -103,5 +103,6 @@ The login flow for the Jury Lookup Backend follows these steps:
 
 6. The client can then use the received token for subsequent requests by including it in the `Authorization` header.
 
-
+### What logging framework is being used?
+For this project we are using WinstonJS. For more details on how to use winston visit their <a href=https://github.com/winstonjs/winston>GitHub page</a>.
 Feel free to adjust the documentation as needed for your specific application.
