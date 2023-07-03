@@ -4,26 +4,33 @@ The Jury Lookup Backend is a Node.js application that utilizes MongoDB for data 
 
 ## Installation
 
-To install the dependencies, run the following command:
+1. To install the dependencies, run the following command:
 
 ```
 npm install
 ```
 
-Next, create a new file named `.env` in the root directory of the project. Add the following content to the file:
+2. Next, create a new file named `.env` in the root directory of the project. Add the following content to the file:
 
 ```
 DATABASE_URL=[MONGODB_URL]
 JWT_SECRET=[GENERATED_SECRET]
+LOG_LEVEL= [OPTIONS] // options are error, warn, info, http, verbose, debug, or silly.
+LOGTAIL_SOURCE_TOKEN = [SOURCE_TOKEN]
 ```
 
-Replace `[MONGODB_URL]` with the URL of your MongoDB database. To generate a JWT secret, run the following command in your terminal:
+3. Replace `[MONGODB_URL]` with the URL of your MongoDB database. To generate a JWT secret, run the following command in your terminal:
 
 ```
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-Copy the generated secret and replace `[GENERATED_SECRET]` in the `.env` file.
+4. Copy the generated secret and replace `[GENERATED_SECRET]` in the `.env` file.
+
+5. Sign-up for a free account at <a href=https://betterstack.com> Betterstack</a>.
+6. Once signed in, Click `Connect Source` then fill out the name field and select `JavaScript Node.JS`.
+7. After completing the form you'll be presented with a Source Token, replace `[SOURCE_TOKEN]` with the source token.
+
 
 ## Usage
 
@@ -31,6 +38,12 @@ To start the development server, run the following command:
 
 ```
 npm run dev
+```
+
+To start the production server, run the following command:
+
+```
+npm run start
 ```
 
 ## API Documentation
