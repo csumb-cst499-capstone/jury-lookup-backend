@@ -19,7 +19,6 @@ To start dev server run:
 
 | Endpoint                    | Method | Headers                                 | Body                                                   | Response                                               |
 |-----------------------------|--------|-----------------------------------------|--------------------------------------------------------|--------------------------------------------------------|
-| `/api/post`                 | POST   | N/A                                     | N/A                                                    | String: "Post API"                                     |
 | `/api/getAll`               | GET    | N/A                                     | N/A                                                    | JSON Array: Juror records                              |
 | `/api/getOne/:id`           | GET    | N/A                                     | N/A                                                    | JSON Object: Juror record                              |
 | `/api/verify`               | POST   | Authorization: JWT token                | N/A                                                    | JSON Object: Verification result                       |
