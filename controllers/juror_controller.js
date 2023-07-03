@@ -108,7 +108,7 @@ exports.jurorPostpone = async (req, res) => {
       const serviceDate = new Date(foundJuror.SummonsDate + 'T00:00:00Z')
 
       console.log('newDate:', newDate)
-      console.log('day of the week:', )
+      console.log('day of the week:', newDateUTC)
 
       if (!foundJuror.CanPostpone) {
         return res.status(404).json({ message: 'Juror cannot postpone' })
