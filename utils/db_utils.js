@@ -1,15 +1,16 @@
-const mongoose = require('mongoose')
-const mongoString = process.env.DATABASE_URL
+const mongoose = require("mongoose");
+const mongoString = process.env.DATABASE_URL;
+const logger = require("../logger/logger");
 
-mongoose.connect(mongoString)
-const database = mongoose.connection
+mongoose.connect(mongoString);
+const database = mongoose.connection;
 
-database.on('error', (error) => {
-  console.log(error)
-})
+database.on("error", (error) => {
+  logger.error(error);
+});
 
-database.once('connected', () => {
-  console.log('Database Connected')
-})
+database.once("connected", () => {
+  logger.info("Database Connected");
+});
 
-module.exports = database
+module.exports = database;
