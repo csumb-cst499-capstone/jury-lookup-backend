@@ -16,7 +16,7 @@ testUser = {
   CanPostpone: true,
 };
 
-let token = "";
+let token = ""; 
 
 // test getAll
 describe("GET /api/getAll", () => {
@@ -56,6 +56,7 @@ describe("POST /api/login", () => {
       .expect(401, done);
   });
 });
+
 // test login with missing credentials
 describe("POST /api/login", () => {
   it("responds with json", (done) => {
@@ -94,6 +95,99 @@ describe("POST /api/summon", () => {
   it("responds with json", (done) => {
     request(app)
       .post("/api/summon")
+      .expect("Content-Type", /json/)
+      .expect(401, done);
+  });
+});
+
+// test getOne with a correct juror id
+describe("GET /api/getOne/:id", () => {
+  it("responds with json", (done) => {
+    const jurorId = "646da7233d0150094a665cf6";
+    request(app)
+      .get(`/api/getOne/${jurorId}`)
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+});
+
+// test getOne with an incorrect juror id
+describe("GET /api/getOne/:id", () => {
+  it("responds with json", (done) => {
+    const jurorId = "646da7233d015";
+    request(app)
+      .get(`/api/getOne/${jurorId}`)
+      .expect("Content-Type", /json/)
+      .expect(500, done);
+  });
+});
+
+// test verify token with a correct token
+describe("POST /api/verify", () => {
+  it("responds with json", (done) => {
+    request(app)
+      .post("/api/verify")
+      .set("Authorization", token)
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+});
+
+// test verify token without a token
+describe("POST /api/verify", () => {
+  it("responds with json", (done) => {
+    request(app)
+      .post("/api/verify")
+      .expect("Content-Type", /json/)
+      .expect(401, done);
+  });
+});
+
+// test postpone with a correct token and incorrect postpone date
+describe("POST /api/postpone", () => {
+  it("responds with json", (done) => {
+    const postponeDate = "2023-11-26";
+    request(app)
+      .post("/api/postpone")
+      .set("Authorization", token)
+      .send({ BadgeNumber: "9999999", PostponeDate: postponeDate })
+      .expect("Content-Type", /json/)
+      .expect(404, done);
+  });
+});
+
+// test postpone without a token
+describe("POST /api/postpone", () => {
+  it("responds with json", (done) => {
+    const postponeDate = "2023-12-30";
+    request(app)
+      .post("/api/postpone")
+      .send({ BadgeNumber: "9999999", PostponeDate: postponeDate })
+      .expect("Content-Type", /json/)
+      .expect(401, done);
+  });
+});
+
+// test changePostponeStatus with a correct token and correct CanPostpone value
+describe("POST /api/changePostponeStatus", () => {
+  it("responds with json", (done) => {
+    const CanPostpone = true;
+    request(app)
+      .post("/api/changePostponeStatus")
+      .set("Authorization", token)
+      .send({ BadgeNumber: "9999999", CanPostpone })
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+});
+
+// test changePostponeStatus without a token
+describe("POST /api/changePostponeStatus", () => {
+  it("responds with json", (done) => {
+    const CanPostpone = true;
+    request(app)
+      .post("/api/changePostponeStatus")
+      .send({ BadgeNumber: "9999999", CanPostpone })
       .expect("Content-Type", /json/)
       .expect(401, done);
   });
