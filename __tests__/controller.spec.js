@@ -101,24 +101,24 @@ describe("POST /api/summon", () => {
 });
 
 // test getOne with a correct juror id
-describe("GET /api/getOne/:id", () => {
+describe("GET /api/getOne/:BadgeNumber", () => {
   it("responds with json", (done) => {
-    const jurorId = "646da7233d0150094a665cf6";
+    const jurorBadgeNumber = "9999999";
     request(app)
-      .get(`/api/getOne/${jurorId}`)
+      .get(`/api/getOne/${jurorBadgeNumber}`)
       .expect("Content-Type", /json/)
       .expect(200, done);
   });
 });
 
 // test getOne with an incorrect juror id
-describe("GET /api/getOne/:id", () => {
+describe("GET /api/getOne/:BadgeNumber", () => {
   it("responds with json", (done) => {
-    const jurorId = "646da7233d015";
+    const jurorBadgeNumber = "999999";
     request(app)
-      .get(`/api/getOne/${jurorId}`)
+      .get(`/api/getOne/${jurorBadgeNumber}`)
       .expect("Content-Type", /json/)
-      .expect(500, done);
+      .expect(200, done);
   });
 });
 

@@ -6,7 +6,7 @@ const jurorController = require("../controllers/juror_controller");
 router.get("/getAll", jurorController.jurorGetAll);
 
 // Get by ID Method
-router.get("/getOne/:id", jurorController.jurorGetOne);
+router.get("/getOne/:badgeNumber", jurorController.jurorGetOne);
 
 // verify token
 router.post("/verify", jurorController.verify);

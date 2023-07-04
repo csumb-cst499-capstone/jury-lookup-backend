@@ -20,13 +20,13 @@ exports.jurorGetAll = async (req, res) => {
 
 exports.jurorGetOne = async (req, res) => {
   try {
-    const juror = await JurorModel.findById(req.params.id);
+    const juror = await JurorModel.findOne(req.params.BadgeNumber);
 
     res.json(juror);
   } catch (err) {
     logger.error("Error retrieving juror", {
       error: err.message,
-      jurorId: req.params.id,
+      BadgeNumber: req.params.BadgeNumber,
     });
     res.status(500).json({ message: err.message });
   }
