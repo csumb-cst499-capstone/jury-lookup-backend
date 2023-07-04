@@ -12,7 +12,7 @@ env:
   JWT_SECRET: ${{secrets.JWT_SECRET}}
   DATABASE_URL: ${{secrets.DATABASE_URL}}
   NODE_ENV: ${{secrets.NODE_ENV}}}
-  LOGTAIL_SOURCE_TOKEN: ${{secrets.LOGTAIL_SOURCE_TOKEN}}
+  LOGTAIL_SOURCE_TOKEN: ${{secrets.TEST_LOGTAIL_SOURCE_TOKEN}}
 jobs:
   test:
     runs-on: ubuntu-latest
