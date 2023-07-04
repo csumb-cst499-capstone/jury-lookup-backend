@@ -7,24 +7,24 @@ describe("logger", () => {
     delete process.env.NODE_ENV;
   });
 
-  test("should use the production logger when NODE_ENV is 'production'", () => {
+  test("should use the production logger when NODE_ENV is 'prod'", () => {
     const ProductionLogger = require("../logger/production_logger");
     const productionLoggerInstance = {};
     ProductionLogger.mockReturnValue(productionLoggerInstance);
 
-    process.env.NODE_ENV = "production";
+    process.env.NODE_ENV = "prod";
     const logger = require("../logger/logger");
 
     expect(ProductionLogger).toHaveBeenCalledTimes(1);
     expect(logger).toBe(productionLoggerInstance);
   });
 
-  test("should use the development logger when NODE_ENV is 'development'", () => {
+  test("should use the development logger when NODE_ENV is 'dev'", () => {
     const developmentLoggerInstance = {};
     const DevelopmentLogger = require("../logger/development_logger");
     DevelopmentLogger.mockReturnValue(developmentLoggerInstance);
 
-    process.env.NODE_ENV = "development";
+    process.env.NODE_ENV = "dev";
     const logger = require("../logger/logger");
 
     expect(logger).toStrictEqual(developmentLoggerInstance);

@@ -1,5 +1,6 @@
 const app = require("../app");
 const request = require("supertest");
+const logger = require("../logger/logger");
 
 testUser = {
   BadgeNumber: "9999999",
@@ -16,8 +17,10 @@ testUser = {
   CanPostpone: true,
 };
 
-let token = ""; 
-
+let token = "";
+beforeAll(async () => {
+  logger.silent = true;
+});
 // test getAll
 describe("GET /api/getAll", () => {
   it("responds with json", (done) => {

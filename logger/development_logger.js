@@ -1,5 +1,5 @@
 const { createLogger, format, transports } = require("winston");
-const { combine, timestamp, json, colorize, errors } = format;
+const { combine, timestamp, json, errors } = format;
 
 const DevelopmentLogger = () => {
   return createLogger({
