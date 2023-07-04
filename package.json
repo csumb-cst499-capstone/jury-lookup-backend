@@ -4,7 +4,7 @@
   "description": "Nodejs backend",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_ENV=development jest --coverage --verbose --detectOpenHandles --forceExit",
+    "test": "NODE_ENV=production jest --coverage --verbose --detectOpenHandles --forceExit",
     "start": "NODE_ENV=production nodemon server.js",
     "dev": "NODE_ENV=development nodemon server.js"
   },
