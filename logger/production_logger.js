@@ -2,8 +2,9 @@ const { createLogger, format, transports } = require("winston");
 const { combine, timestamp, json, errors, printf } = format;
 const { Logtail } = require("@logtail/node");
 const { LogtailTransport } = require("@logtail/winston");
+const e = require("express");
 
-const logtail = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN);
+const logtail = new Logtail(process.env.LOGTAIL_SOURCE_TOKEN || "12345");
 
 const logFormat = printf(({ level, message, timestamp }) => {
   return `${timestamp} [${level.toUpperCase()}]: ${message}`;
