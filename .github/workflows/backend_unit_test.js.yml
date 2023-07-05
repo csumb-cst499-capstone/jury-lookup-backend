@@ -11,13 +11,15 @@ on:
 env: 
   JWT_SECRET: ${{secrets.JWT_SECRET}}
   DATABASE_URL: ${{secrets.DATABASE_URL}}
+  NODE_ENV: ${{secrets.NODE_ENV}}}
+  LOGTAIL_SOURCE_TOKEN: ${{secrets.TEST_LOGTAIL_SOURCE_TOKEN}}
 jobs:
   test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [18.x, 19.0]
+        node-version: [18.x, 19.x]
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
     steps:
     - uses: actions/checkout@v3
