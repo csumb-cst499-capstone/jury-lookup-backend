@@ -125,18 +125,19 @@ exports.jurorPostpone = async (req, res) => {
       logger.debug("postpone date:", req.body.PostponeDate);
       const newDate = new Date(req.body.PostponeDate + "T00:00:00Z");
       const serviceDate = new Date(foundJuror.SummonsDate + "T00:00:00Z");
+      const newDateUTC = newDate.getUTCDay()
 
       logger.debug("newDate:", newDate);
-      logger.debug("day of the week:", newDate.getDay());
+      logger.debug("day of the week:", newDateUTC);
 
       if (!foundJuror.CanPostpone) {
         return res.status(404).json({ message: "Juror cannot postpone" });
       }
 
-      if (newDate.getDay() !== 1) {
+      if (newDateUTC !== 1) {
         return res
           .status(404)
-          .json({ message: "Postpone date must be a Monday" });
+          .json({ message: "Postpone date must be a Monday" + newDateUTC });
       }
 
       if (newDate < serviceDate) {
