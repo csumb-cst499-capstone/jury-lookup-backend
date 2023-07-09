@@ -125,18 +125,19 @@ exports.jurorPostpone = async (req, res) => {
       logger.debug("postpone date:", req.body.PostponeDate);
       const newDate = new Date(req.body.PostponeDate + "T00:00:00Z");
       const serviceDate = new Date(foundJuror.SummonsDate + "T00:00:00Z");
+      const newDateUTC = newDate.getUTCDay()
 
       logger.debug("newDate:", newDate);
-      logger.debug("day of the week:", newDate.getDay());
+      logger.debug("day of the week:", newDateUTC);
 
       if (!foundJuror.CanPostpone) {
         return res.status(404).json({ message: "Juror cannot postpone" });
       }
 
-      if (newDate.getDay() !== 1) {
+      if (newDateUTC !== 1) {
         return res
           .status(404)
-          .json({ message: "Postpone date must be a Monday" });
+          .json({ message: "Postpone date must be a Monday" + newDateUTC });
       }
 
       if (newDate < serviceDate) {
@@ -176,6 +177,32 @@ exports.jurorPostpone = async (req, res) => {
     });
   } catch (err) {
     logger.error("Error postponing juror", {
+      error: err.message,
+      badgeNumber: req.body.BadgeNumber,
+    });
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.jurorResetSummonsDate = async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  try {
+    JWT.verifyToken(req, res, async () => {
+      const foundJuror = await JurorModel.findOne({
+        BadgeNumber: req.body.BadgeNumber,
+      });
+      if(!foundJuror) {
+        return res.status(404).json({ message: "Juror not found" });
+      }
+      foundJuror.SummonsDate = '2023-06-19';
+      foundJuror.CanPostpone = true;
+
+      const newJuror = await foundJuror.save();
+
+      res.json(newJuror);
+    });
+  } catch (err) {
+    logger.error("Error resetting juror summons date", {
       error: err.message,
       badgeNumber: req.body.BadgeNumber,
     });
