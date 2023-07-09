@@ -20,6 +20,9 @@ router.post("/postpone", jurorController.jurorPostpone);
 // Change postpone status
 router.post("/changePostponeStatus", jurorController.jurorChangeCanPostpone);
 
+// Reset summons date
+router.post("/resetSummonsDate", jurorController.jurorResetSummonsDate);
+
 // Get Summon Details
 router.post("/summon", jurorController.jurorSummonDetails);
 

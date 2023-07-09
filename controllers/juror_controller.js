@@ -184,6 +184,32 @@ exports.jurorPostpone = async (req, res) => {
   }
 };
 
+exports.jurorResetSummonsDate = async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  try {
+    JWT.verifyToken(req, res, async () => {
+      const foundJuror = await JurorModel.findOne({
+        BadgeNumber: req.body.BadgeNumber,
+      });
+      if(!foundJuror) {
+        return res.status(404).json({ message: "Juror not found" });
+      }
+      foundJuror.SummonsDate = '2023-06-19';
+      foundJuror.CanPostpone = true;
+
+      const newJuror = await foundJuror.save();
+
+      res.json(newJuror);
+    });
+  } catch (err) {
+    logger.error("Error resetting juror summons date", {
+      error: err.message,
+      badgeNumber: req.body.BadgeNumber,
+    });
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.jurorChangeCanPostpone = async (req, res) => {
   try {
     JWT.verifyToken(req, res, async () => {
