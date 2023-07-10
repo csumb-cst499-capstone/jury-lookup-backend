@@ -146,26 +146,56 @@ describe("POST /api/verify", () => {
   });
 });
 
-// test postpone with a correct token and incorrect postpone date
-describe("POST /api/postpone", () => {
+// test editSummons with a correct token and location and incorrect postpone date
+describe("POST /api/editSummons", () => {
   it("responds with json", (done) => {
-    const postponeDate = "2023-11-26";
+    const postponeDate = "2023-12-30";
+    const location = "King City";
     request(app)
-      .post("/api/postpone")
+      .post("/api/editSummons")
       .set("Authorization", token)
-      .send({ BadgeNumber: "9999999", PostponeDate: postponeDate })
+      .send({ PostponeDate: postponeDate, ReportingLocation: location })
       .expect("Content-Type", /json/)
       .expect(404, done);
   });
 });
 
-// test postpone without a token
-describe("POST /api/postpone", () => {
+// test editSummons with a correct token and correct location and correct postpone date
+describe("POST /api/editSummons", () => {
+  it("responds with json", (done) => {
+    const postponeDate = "2023-06-26";
+    const location = "Salinas";
+    request(app)
+      .post("/api/editSummons")
+      .set("Authorization", token)
+      .send({ ReportingLocation: location, PostponeDate: postponeDate })
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+});
+
+// test editSummons with a correct token and incorrect location and correct postpone date
+describe("POST /api/editSummons", () => {
   it("responds with json", (done) => {
     const postponeDate = "2023-12-30";
+    const location = "King City";
     request(app)
-      .post("/api/postpone")
-      .send({ BadgeNumber: "9999999", PostponeDate: postponeDate })
+      .post("/api/editSummons")
+      .set("Authorization", token)
+      .send({ PostponeDate: postponeDate, ReportingLocation: location })
+      .expect("Content-Type", /json/)
+      .expect(404, done);
+  });
+});
+
+// test editSummons without a token
+describe("POST /api/editSummons", () => {
+  it("responds with json", (done) => {
+    const postponeDate = "2023-12-30";
+    const location = "King City";
+    request(app)
+      .post("/api/editSummons")
+      .send({ PostponeDate: postponeDate, ReportingLocation: location })
       .expect("Content-Type", /json/)
       .expect(401, done);
   });
@@ -203,29 +233,6 @@ describe("GET /api/getReportingLocations", () => {
       .get("/api/getReportingLocations")
       .expect("Content-Type", /json/)
       .expect(200, done);
-  });
-});
-
-// test changeReportingLocation
-describe("POST /api/changeReportingLocation", () => {
-  it("responds with json", (done) => {
-    request(app)
-      .post("/api/changeReportingLocation")
-      .set("Authorization", token)
-      .send({ BadgeNumber: "9999999", ReportingLocation: "Criminal Court" })
-      .expect("Content-Type", /json/)
-      .expect(200, done);
-  });
-});
-
-// test changeReportingLocation without a token
-describe("POST /api/changeReportingLocation", () => {
-  it("responds with json", (done) => {
-    request(app)
-      .post("/api/changeReportingLocation")
-      .send({ BadgeNumber: "9999999", ReportingLocation: "Criminal Court" })
-      .expect("Content-Type", /json/)
-      .expect(401, done);
   });
 });
 
