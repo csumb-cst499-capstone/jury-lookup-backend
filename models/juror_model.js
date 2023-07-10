@@ -6,7 +6,7 @@ const {
   logSaveOperation,
   logUpdateOperation,
   logDeleteOperation,
-} = require("../middlewares/juror_middleware");
+} = require("../middlewares/db_log_middleware");
 
 const Schema = mongoose.Schema;
 const jurorSchema = new Schema(
