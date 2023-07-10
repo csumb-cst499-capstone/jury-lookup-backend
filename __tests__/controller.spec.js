@@ -195,3 +195,58 @@ describe("POST /api/changePostponeStatus", () => {
       .expect(401, done);
   });
 });
+
+// test jurorGetReportingLocations 
+describe("GET /api/getReportingLocations", () => {
+  it("responds with json", (done) => {
+    request(app)
+      .get("/api/getReportingLocations")
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+});
+
+// test changeReportingLocation
+describe("POST /api/changeReportingLocation", () => {
+  it("responds with json", (done) => {
+    request(app)
+      .post("/api/changeReportingLocation")
+      .set("Authorization", token)
+      .send({ BadgeNumber: "9999999", ReportingLocation: "Criminal Court" })
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+});
+
+// test changeReportingLocation without a token
+describe("POST /api/changeReportingLocation", () => {
+  it("responds with json", (done) => {
+    request(app)
+      .post("/api/changeReportingLocation")
+      .send({ BadgeNumber: "9999999", ReportingLocation: "Criminal Court" })
+      .expect("Content-Type", /json/)
+      .expect(401, done);
+  });
+});
+
+// test resetSummonsDate
+describe("POST /api/resetSummonsDate", () => {
+  it("responds with json", (done) => {
+    request(app)
+      .post("/api/resetSummonsDate")
+      .set("Authorization", token)
+      .send({ BadgeNumber: "9999999" })
+      .expect("Content-Type", /json/)
+      .expect(200, done);
+  });
+});
+
+// test resetSummonsDate without a token
+describe("POST /api/resetSummonsDate", () => {
+  it("responds with json", (done) => {
+    request(app)
+      .post("/api/resetSummonsDate")
+      .expect("Content-Type", /json/)
+      .expect(401, done);
+  });
+});

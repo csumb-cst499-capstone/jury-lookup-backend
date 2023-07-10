@@ -184,6 +184,70 @@ exports.jurorPostpone = async (req, res) => {
   }
 };
 
+exports.jurorGetReportingLocations = async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  try {
+    const reportingLocations = await JurorModel.distinct("ReportingLocation");
+    res.json(reportingLocations);
+  } catch (err) {
+    logger.error("Error retrieving reporting locations", {
+      error: err.message,
+    });
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.jurorChangeReportingLocation = async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  try {
+    JWT.verifyToken(req, res, async () => {
+      const foundJuror = await JurorModel.findOne({
+        BadgeNumber: req.body.BadgeNumber,
+      });
+      
+      if (!foundJuror) {
+        return res.status(404).json({ message: "Juror not found" });
+      }
+
+      if (!foundJuror.CanPostpone) {
+        return res.status(404).json({ message: "Juror cannot postpone" });
+      }
+
+      const newLocation = req.body.ReportingLocation;
+      foundJuror.ReportingLocation = newLocation;
+      foundJuror.CanPostpone = false;
+
+      foundJuror.ReportingLocation = newLocation;
+      const newJuror = await foundJuror.save();
+      const {
+        FirstName,
+        LastName,
+        BadgeNumber,
+        SummonsDate,
+        GroupNumber,
+        ReportingLocation,
+        CanPostpone,
+      } = newJuror;
+
+      res.json({
+        FirstName,
+        LastName,
+        BadgeNumber,
+        SummonsDate,
+        GroupNumber,
+        ReportingLocation,
+        CanPostpone,
+      });
+    });
+  } catch (err) {
+    logger.error("Error changing juror reporting location", {
+      error: err.message,
+      badgeNumber: req.body.BadgeNumber,
+    });
+    res.status(500).json({ message: err.message });
+  }
+};
+
 exports.jurorResetSummonsDate = async (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   try {

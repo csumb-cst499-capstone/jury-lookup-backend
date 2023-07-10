@@ -17,6 +17,12 @@ router.post("/login", jurorController.jurorLogin);
 // Post method to postpone
 router.post("/postpone", jurorController.jurorPostpone);
 
+// Post method to change ReportingLocation
+router.post("/changeReportingLocation", jurorController.jurorChangeReportingLocation);
+
+// Get ReportingLocations
+router.get("/getReportingLocations", jurorController.jurorGetReportingLocations);
+
 // Change postpone status
 router.post("/changePostponeStatus", jurorController.jurorChangeCanPostpone);
 
