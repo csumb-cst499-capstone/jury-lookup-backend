@@ -237,10 +237,10 @@ describe("GET /api/getReportingLocations", () => {
 });
 
 // test resetSummonsDate
-describe("POST /api/resetSummonsDate", () => {
+describe("POST /api/resetSummonsTest", () => {
   it("responds with json", (done) => {
     request(app)
-      .post("/api/resetSummonsDate")
+      .post("/api/resetSummonsTest")
       .set("Authorization", token)
       .send({ BadgeNumber: "9999999" })
       .expect("Content-Type", /json/)
@@ -249,10 +249,10 @@ describe("POST /api/resetSummonsDate", () => {
 });
 
 // test resetSummonsDate without a token
-describe("POST /api/resetSummonsDate", () => {
+describe("POST /api/resetSummonsTest", () => {
   it("responds with json", (done) => {
     request(app)
-      .post("/api/resetSummonsDate")
+      .post("/api/resetSummonsTest")
       .expect("Content-Type", /json/)
       .expect(401, done);
   });
