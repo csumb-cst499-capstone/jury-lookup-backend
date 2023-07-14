@@ -199,7 +199,7 @@ exports.jurorGetReportingLocations = async (req, res) => {
   }
 };
 
-exports.jurorResetSummonsDate = async (req, res) => {
+exports.jurorResetSummonsTest = async (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   try {
     JWT.verifyToken(req, res, async () => {
@@ -210,6 +210,7 @@ exports.jurorResetSummonsDate = async (req, res) => {
         return res.status(404).json({ message: "Juror not found" });
       }
       foundJuror.SummonsDate = '2023-06-19';
+      foundJuror.ReportingLocation = 'Monterey';
       foundJuror.CanPostpone = true;
 
       const newJuror = await foundJuror.save();

@@ -24,7 +24,7 @@ router.get("/getReportingLocations", jurorController.jurorGetReportingLocations)
 router.post("/changePostponeStatus", jurorController.jurorChangeCanPostpone);
 
 // Reset summons date
-router.post("/resetSummonsDate", jurorController.jurorResetSummonsDate);
+router.post("/resetSummonsTest", jurorController.jurorResetSummonsTest);
 
 // Get Summon Details
 router.post("/summon", jurorController.jurorSummonDetails);
