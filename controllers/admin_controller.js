@@ -31,3 +31,54 @@ exports.adminSearch = async (req, res) => {
     res.status(500).json({ error: "An error occurred while searching jurors" });
   }
 };
+// find by id
+exports.adminGetOne = async (req, res) => {
+  try {
+    const juror = await JurorModel.findById(req.params.id);
+
+    juror
+      ? res.json(juror)
+      : res.status(404).json({ message: "Juror not found" });
+  } catch (err) {
+    logger.error("Error retrieving juror", {
+      error: err.message,
+      id: req.params.id,
+    });
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.adminEditJuror = async (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  try {
+    const foundJuror = await JurorModel.findById(req.params.id);
+
+    if (!foundJuror) {
+      return res.status(404).json({ message: "Juror not found" });
+    }
+
+    // Update the juror's fields
+    foundJuror.FirstName = req.body.FirstName;
+    foundJuror.LastName = req.body.LastName;
+    foundJuror.SummonsDate = req.body.SummonsDate;
+    foundJuror.PinCode = req.body.PinCode;
+    foundJuror.Email = req.body.Email;
+    foundJuror.MailingAddress = req.body.MailingAddress;
+    foundJuror.City = req.body.City;
+    foundJuror.State = req.body.State;
+    foundJuror.GroupNumber = req.body.GroupNumber;
+    foundJuror.ReportingLocation = req.body.ReportingLocation;
+    foundJuror.CanPostpone = req.body.CanPostpone;
+
+    // Save the updated juror
+    const updatedJuror = await foundJuror.save();
+
+    res.json(updatedJuror);
+  } catch (err) {
+    logger.error("Error editing juror", {
+      error: err.message,
+      badgeNumber: req.body.BadgeNumber,
+    });
+    res.status(500).json({ message: err.message });
+  }
+};

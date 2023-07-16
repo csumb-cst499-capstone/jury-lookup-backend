@@ -36,4 +36,8 @@ router.post("/summon", jurorController.jurorSummonDetails);
 // search for juror
 router.get("/admin/search", adminController.adminSearch);
 
+router.put("/admin/juror/edit/:id", adminController.adminEditJuror);
+
+router.get("/admin/juror/:id", adminController.adminGetOne);
+
 module.exports = router;
