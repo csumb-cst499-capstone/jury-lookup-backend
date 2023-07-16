@@ -110,7 +110,7 @@ exports.jurorSummonDetails = async (req, res) => {
   }
 };
 
-exports.jurorPostpone = async (req, res) => {
+exports.jurorEditSummons = async (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   try {
     JWT.verifyToken(req, res, async () => {
@@ -123,6 +123,7 @@ exports.jurorPostpone = async (req, res) => {
       }
 
       logger.debug("postpone date:", req.body.PostponeDate);
+      logger.debug("reporting location:", req.body.ReportingLocation);
       const newDate = new Date(req.body.PostponeDate + "T00:00:00Z");
       const serviceDate = new Date(foundJuror.SummonsDate + "T00:00:00Z");
       const newDateUTC = newDate.getUTCDay()
@@ -137,7 +138,7 @@ exports.jurorPostpone = async (req, res) => {
       if (newDateUTC !== 1) {
         return res
           .status(404)
-          .json({ message: "Postpone date must be a Monday" + newDateUTC });
+          .json({ message: "Postpone date must be a Monday" });
       }
 
       if (newDate < serviceDate) {
@@ -152,6 +153,7 @@ exports.jurorPostpone = async (req, res) => {
         });
       }
 
+      foundJuror.ReportingLocation = req.body.ReportingLocation;
       foundJuror.SummonsDate = req.body.PostponeDate;
       foundJuror.CanPostpone = false;
       const newJuror = await foundJuror.save();
@@ -197,58 +199,7 @@ exports.jurorGetReportingLocations = async (req, res) => {
   }
 };
 
-exports.jurorChangeReportingLocation = async (req, res) => {
-  res.set("Access-Control-Allow-Origin", "*");
-  try {
-    JWT.verifyToken(req, res, async () => {
-      const foundJuror = await JurorModel.findOne({
-        BadgeNumber: req.body.BadgeNumber,
-      });
-      
-      if (!foundJuror) {
-        return res.status(404).json({ message: "Juror not found" });
-      }
-
-      if (!foundJuror.CanPostpone) {
-        return res.status(404).json({ message: "Juror cannot postpone" });
-      }
-
-      const newLocation = req.body.ReportingLocation;
-      foundJuror.ReportingLocation = newLocation;
-      foundJuror.CanPostpone = false;
-
-      foundJuror.ReportingLocation = newLocation;
-      const newJuror = await foundJuror.save();
-      const {
-        FirstName,
-        LastName,
-        BadgeNumber,
-        SummonsDate,
-        GroupNumber,
-        ReportingLocation,
-        CanPostpone,
-      } = newJuror;
-
-      res.json({
-        FirstName,
-        LastName,
-        BadgeNumber,
-        SummonsDate,
-        GroupNumber,
-        ReportingLocation,
-        CanPostpone,
-      });
-    });
-  } catch (err) {
-    logger.error("Error changing juror reporting location", {
-      error: err.message,
-      badgeNumber: req.body.BadgeNumber,
-    });
-    res.status(500).json({ message: err.message });
-  }
-};
-
-exports.jurorResetSummonsDate = async (req, res) => {
+exports.jurorResetSummonsTest = async (req, res) => {
   res.set("Access-Control-Allow-Origin", "*");
   try {
     JWT.verifyToken(req, res, async () => {
@@ -259,6 +210,7 @@ exports.jurorResetSummonsDate = async (req, res) => {
         return res.status(404).json({ message: "Juror not found" });
       }
       foundJuror.SummonsDate = '2023-06-19';
+      foundJuror.ReportingLocation = 'Monterey';
       foundJuror.CanPostpone = true;
 
       const newJuror = await foundJuror.save();
