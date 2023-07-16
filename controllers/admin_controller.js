@@ -57,18 +57,10 @@ exports.adminEditJuror = async (req, res) => {
       return res.status(404).json({ message: "Juror not found" });
     }
 
-    // Update the juror's fields
-    foundJuror.FirstName = req.body.FirstName;
-    foundJuror.LastName = req.body.LastName;
-    foundJuror.SummonsDate = req.body.SummonsDate;
-    foundJuror.PinCode = req.body.PinCode;
-    foundJuror.Email = req.body.Email;
-    foundJuror.MailingAddress = req.body.MailingAddress;
-    foundJuror.City = req.body.City;
-    foundJuror.State = req.body.State;
-    foundJuror.GroupNumber = req.body.GroupNumber;
-    foundJuror.ReportingLocation = req.body.ReportingLocation;
-    foundJuror.CanPostpone = req.body.CanPostpone;
+    // Update the juror's fields based on the fields sent in the request body
+    for (const field in req.body) {
+      foundJuror[field] = req.body[field];
+    }
 
     // Save the updated juror
     const updatedJuror = await foundJuror.save();
