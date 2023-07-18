@@ -209,7 +209,7 @@ exports.jurorResetSummonsTest = async (req, res) => {
       if(!foundJuror) {
         return res.status(404).json({ message: "Juror not found" });
       }
-      foundJuror.SummonsDate = "2069-01-07";
+      foundJuror.SummonsDate = "2100-01-04";
       foundJuror.ReportingLocation = 'Monterey';
       foundJuror.CanPostpone = true;
 
