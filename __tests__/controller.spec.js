@@ -149,7 +149,7 @@ describe("POST /api/verify", () => {
 // test editSummons with a correct token and location and incorrect postpone date
 describe("POST /api/editSummons", () => {
   it("responds with json", (done) => {
-    const postponeDate = "2023-12-30";
+    const postponeDate = "2100-01-05";
     const location = "King City";
     request(app)
       .post("/api/editSummons")
@@ -163,7 +163,7 @@ describe("POST /api/editSummons", () => {
 // test editSummons with a correct token and correct location and correct postpone date
 describe("POST /api/editSummons", () => {
   it("responds with json", (done) => {
-    const postponeDate = "2023-06-26";
+    const postponeDate = "2100-01-04";
     const location = "Salinas";
     request(app)
       .post("/api/editSummons")
@@ -174,24 +174,10 @@ describe("POST /api/editSummons", () => {
   });
 });
 
-// test editSummons with a correct token and incorrect location and correct postpone date
-describe("POST /api/editSummons", () => {
-  it("responds with json", (done) => {
-    const postponeDate = "2023-12-30";
-    const location = "King City";
-    request(app)
-      .post("/api/editSummons")
-      .set("Authorization", token)
-      .send({ PostponeDate: postponeDate, ReportingLocation: location })
-      .expect("Content-Type", /json/)
-      .expect(404, done);
-  });
-});
-
 // test editSummons without a token
 describe("POST /api/editSummons", () => {
   it("responds with json", (done) => {
-    const postponeDate = "2023-12-30";
+    const postponeDate = "2100-12-30";
     const location = "King City";
     request(app)
       .post("/api/editSummons")
