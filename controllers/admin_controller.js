@@ -3,6 +3,7 @@ require("express-async-errors");
 const CONSTANT = require("../constants/JUROR_CONSTANTS");
 const JWT = require("../utils/jwt_utils");
 const logger = require("../logger/logger");
+
 exports.adminSearch = async (req, res) => {
   const { query } = req.query;
 
