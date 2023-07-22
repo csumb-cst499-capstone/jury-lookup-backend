@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const jurorController = require("../controllers/juror_controller");
 const adminController = require("../controllers/admin_controller");
+//const { jwtCheck, checkScopes } = require("../middlewares/auth0_middleware");
+//require("../middlewares/auth0_middleware");
 
 // Get all Method
 router.get("/getAll", jurorController.jurorGetAll);
@@ -37,7 +39,6 @@ router.post("/summon", jurorController.jurorSummonDetails);
 router.get("/admin/search", adminController.adminSearch);
 
 router.patch("/admin/juror/edit/:id", adminController.adminEditJuror);
-
 
 router.get("/admin/juror/:id", adminController.adminGetOne);
 
