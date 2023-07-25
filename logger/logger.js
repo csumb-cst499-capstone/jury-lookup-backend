@@ -5,7 +5,7 @@ if (process.env.NODE_ENV === "production") {
   logger = ProductionLogger();
 }
 
-if (process.env.NODE_ENV === "devevelopment") {
+if (process.env.NODE_ENV === "dev") {
   logger = DevelopmentLogger();
 }
 
