@@ -7,12 +7,12 @@ describe("logger", () => {
     delete process.env.NODE_ENV;
   });
 
-  test("should use the production logger when NODE_ENV is 'prod'", () => {
+  test("should use the production logger when NODE_ENV is 'production'", () => {
     const ProductionLogger = require("../logger/production_logger");
     const productionLoggerInstance = {};
     ProductionLogger.mockReturnValue(productionLoggerInstance);
 
-    process.env.NODE_ENV = "prod";
+    process.env.NODE_ENV = "production";
     const logger = require("../logger/logger");
 
     expect(ProductionLogger).toHaveBeenCalledTimes(1);
