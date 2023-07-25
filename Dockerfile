@@ -1,21 +1,37 @@
-FROM node:current-slim
+FROM --platform=linux/amd64 node:current-slim
 # Create app directory
-WORKDIR /usr/src/app
+
+WORKDIR /app
+
 # Install app dependencies
 COPY package*.json ./
 RUN npm install
+
 # Bundle app source
 COPY . .
+
+# Set the default values for ARGs (if needed)
 ARG DATABASE_URL
 ARG JWT_SECRET
 ARG LOG_LEVEL=debug
 ARG LOGTAIL_SOURCE_TOKEN
-ARG PORT
+ARG NODE_ENV=production
+ARG ALLOWED_ORIGINS
+ARG PORT=8000
+ARG AUTH0_AUDIENCE=http://localhost:8000
+ARG AUTH0_ISSUER_BASE_URL
 
-# Add environment variables
-ENV DATABASE_URL=DATABASE_URL
-ENV JWT_SECRET=JWT_SECRET
-ENV LOG_LEVEL=LOG_LEVEL
-ENV LOGTAIL_SOURCE_TOKEN=LOGTAIL_SOURCE_TOKEN
-EXPOSE 8080
+# Add environment variables with correct values
+ENV NODE_ENV=${NODE_ENV}
+ENV ALLOWED_ORIGINS=${ALLOWED_ORIGINS}
+ENV DATABASE_URL=${DATABASE_URL}
+ENV JWT_SECRET=${JWT_SECRET}
+ENV LOG_LEVEL=${LOG_LEVEL}
+ENV LOGTAIL_SOURCE_TOKEN=${LOGTAIL_SOURCE_TOKEN}
+ENV PORT=${PORT}
+ENV AUTH0_AUDIENCE=${AUTH0_AUDIENCE}
+ENV AUTH0_ISSUER_BASE_URL=${AUTH0_ISSUER_BASE_URL}
+
+
+EXPOSE ${PORT}
 CMD [ "npm", "start" ]

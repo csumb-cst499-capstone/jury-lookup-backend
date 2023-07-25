@@ -8,7 +8,7 @@ const MorganMiddleware = require("./middlewares/morgan_middleware");
 const jwtCheck = require("./middlewares/auth0_middleware");
 const app = express();
 const options = {
-  origin: ["http://localhost:3000"],
+  origin: [process.env.ALLOWED_ORIGINS],
 };
 
 app.use(cors(options));
